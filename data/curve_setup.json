@@ -82,8 +82,8 @@
       {"Type": "Swap", "Tenor": "5Y", "Quote": 4.6423, "SettlementDays": 2},
       {"Type": "Swap", "Tenor": "10Y", "Quote": 4.965, "SettlementDays": 2},
       {"Type": "Swap", "Tenor": "15Y", "Quote": 5.6175, "SettlementDays": 2},
-      {"Type": "Swap", "Tenor": "20Y", "Quote": 5.9185, "SettlementDays": 2},
-      {"Type": "Swap", "Tenor": "30Y", "Quote": 6.2195, "SettlementDays": 2}
+      {"Type": "Swap", "Tenor": "20Y", "Quote": 5.5185, "SettlementDays": 2},
+      {"Type": "Swap", "Tenor": "30Y", "Quote": 5.2195, "SettlementDays": 2}
     ]
   }
 ]

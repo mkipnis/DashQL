@@ -98,7 +98,7 @@ class RatesAnalytics:
                                 ]
                             )
                         ],
-                        title="Bond/MidCurve Analytics",
+                        title="Rates Analytics",
                         item_id="bonds",
                     )
                 ], always_open=True,active_item=["bonds"],
@@ -113,7 +113,7 @@ class RatesAnalytics:
                     dbc.Container(
                         [
                             dbc.NavbarBrand(
-                                "Bond Analytics",
+                                "Rates",
                                 href="#",
                                 className="navbar-brand-custom",
                             ),
@@ -177,7 +177,7 @@ if __name__ == '__main__':
     app = dash.Dash(
         __name__,
         suppress_callback_exceptions=True,
-        title="Bond Analytics",
+        title="Rates",
         external_stylesheets=[dbc.themes.SUPERHERO]
     )
 
