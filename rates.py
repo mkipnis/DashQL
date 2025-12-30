@@ -177,7 +177,7 @@ if __name__ == '__main__':
     app = dash.Dash(
         __name__,
         suppress_callback_exceptions=True,
-        title="Rates",
+        title="Rates Analytics",
         external_stylesheets=[dbc.themes.SUPERHERO]
     )
 
@@ -219,4 +219,4 @@ if __name__ == '__main__':
 
         return f'Evaluation Date: {business_date_py}', bond_portal_curve_dict, index_fixings
 
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
