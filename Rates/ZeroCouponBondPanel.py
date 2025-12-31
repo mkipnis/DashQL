@@ -1,3 +1,5 @@
+import traceback
+
 import QuantLib as ql
 import dash
 from dash import Input, Output, html, dcc
@@ -17,6 +19,8 @@ class ZeroCouponBondPanel:
         self.bond_prefix = f"{prefix}-zero-coupon-bond"
         self.day_counter_id = f"{self.bond_prefix}-day_counter_id"
         self.schedule_id = f"{self.bond_prefix}-schedule"
+
+        self.error_prefix_id = f"{self.bond_prefix}-error"
 
         self.tenor_panel = TenorPanel.TenorPanel(self.app, self.schedule_id)
         self.schedule_panel = SchedulePanel.SchedulePanel(self.app, self.schedule_id)
@@ -208,6 +212,7 @@ class ZeroCouponBondPanel:
 
         @self.app.callback(
             Output(self.zero_coupon_grid.row_data_id, "data"),
+            Output(self.error_prefix_id, "data"),
             Input(self.discount_curve_data_id, "data"),
             Input(self.schedule_panel.output_id, "data"),
             Input(self.bond_prefix, "data"),
@@ -215,27 +220,33 @@ class ZeroCouponBondPanel:
         )
         def reprice_zero_coupon(discount_curve_data, schedule_data, bond_data, _):
             if discount_curve_data is None or schedule_data is None or bond_data is None:
-                return []
+                return [], None
 
-            market_data = discount_curve_data["MarketData"]
-            rate_helpers = CurveUtils.create_rate_helpers(market_data)
-            curve, discount_curve = CurveUtils.bootstrap(rate_helpers)
-            day_counter = discount_curve_data["Curve"]["DayCounter"]
+            try:
+                market_data = discount_curve_data["MarketData"]
+                rate_helpers = CurveUtils.create_rate_helpers(market_data)
+                curve, discount_curve = CurveUtils.bootstrap(rate_helpers)
+                day_counter = discount_curve_data["Curve"]["DayCounter"]
 
-            zeros = BondUtils.get_zeros(schedule_data, bond_data)
-            data_out = []
-            for bond in zeros:
-                engine = ql.DiscountingBondEngine(discount_curve)
-                bond.setPricingEngine(engine)
-                if bond.isExpired():
-                    continue
-                pricing_results = BondUtils.get_pricing_results(
-                    curve, discount_curve, bond, bond.cleanPrice(),
-                    day_counter, schedule_data["Compounding"], schedule_data["Frequency"]
-                )
-                data_out.append(pricing_results)
+                zeros = BondUtils.get_zeros(schedule_data, bond_data)
+                data_out = []
+                for bond in zeros:
+                    engine = ql.DiscountingBondEngine(discount_curve)
+                    bond.setPricingEngine(engine)
+                    if bond.isExpired():
+                        continue
+                    pricing_results = BondUtils.get_pricing_results(
+                        curve, discount_curve, bond, bond.cleanPrice(),
+                        day_counter, schedule_data["Compounding"], schedule_data["Frequency"]
+                    )
+                    data_out.append(pricing_results)
 
-            return data_out
+                return data_out, None
+            except Exception as e:
+                return dash.no_update, {
+                    "message": str(e),
+                    "traceback": traceback.format_exc(),
+                }
 
         @self.app.callback(
             Output(self.discount_curve_data_id, "data"),

@@ -1,3 +1,5 @@
+import traceback
+
 import dash
 import dash_ag_grid as dag
 from dash import Input, Output, html, dcc
@@ -11,10 +13,12 @@ class OISMidCurvePanel(object):
 
     def __init__(self, app: dash.Dash, prefix: str, user_market_data_id: str = ""):
         self.app = app
-        self.prefix = prefix
+        self.prefix = f"{prefix}-mid-curve-panel-id"
         self.user_market_data_id = user_market_data_id
         self.forecast_curve_id = f"{self.prefix}-forecast-curve"
         self.forecast_curve_data_id = f"{self.prefix}-forecast-curve-data"
+
+        self.error_prefix_id = f"{self.prefix}-error"
 
         self.swap_tenors = [
             '6M', '1Y', '2Y', '3Y', '5Y', '7Y', '10Y', '15Y', '20Y', '25Y', '30Y', '40Y', '50Y'
@@ -75,7 +79,7 @@ class OISMidCurvePanel(object):
                                     "Forecast Curve",
                                     forecast_dropdown
                                 ),
-                                ComponentUtils.panel_label("Forecast MidCurves"),
+                                ComponentUtils.panel_label("Forecast mid-curves"),
                             ],
                             style={
                                 "display": "flex",
@@ -146,21 +150,29 @@ class OISMidCurvePanel(object):
         @self.app.callback(
             Output("mid-curve-grid", "rowData"),
             Output("mid_curve_surface", "figure"),
+            Output(self.error_prefix_id, "data"),
             Input(self.forecast_curve_id, "value"),
             Input(self.user_market_data_id, "data"),
         )
         def update_forecast_curve(curve_name, curves):
 
             if curve_name and curves:
-                discount_curve_data = curves[curve_name]
-                market_data = discount_curve_data["MarketData"]
-                rate_helpers = CurveUtils.create_rate_helpers(market_data)
-                curve, discount_curve = CurveUtils.bootstrap(rate_helpers)
 
-                swap_index = curves[curve_name]['Curve']['Index']
+                try:
+                    discount_curve_data = curves[curve_name]
+                    market_data = discount_curve_data["MarketData"]
+                    rate_helpers = CurveUtils.create_rate_helpers(market_data)
+                    curve, discount_curve = CurveUtils.bootstrap(rate_helpers)
 
-                ois_midcurves, ois_midcurves_results, ois_midcurve_surface_results = (
-                    CurveUtils.price_mid_curve(swap_index, discount_curve, self.swap_tenors, self.forward_start_tenors))
+                    swap_index = curves[curve_name]['Curve']['Index']
+
+                    ois_midcurves, ois_midcurves_results, ois_midcurve_surface_results = (
+                        CurveUtils.price_mid_curve(swap_index, discount_curve, self.swap_tenors, self.forward_start_tenors))
+                except Exception as e:
+                    return (dash.no_update,) * 2, {
+                        "message": str(e),
+                        "traceback": traceback.format_exc(),
+                    }
 
                 fig = go.Figure(
                     data=[
@@ -238,6 +250,6 @@ class OISMidCurvePanel(object):
                 )
 
 
-                return ois_midcurves_results, fig
+                return ois_midcurves_results, fig, None
 
-            return dash.no_update
+            return (dash.no_update,) *3

@@ -131,8 +131,19 @@ class RatesAnalytics:
                     className="custom-navbar",
                 ),
 
+                dcc.Store(id=rates_analytics.curve_chart_panel.error_prefix_id),
+                dcc.Store(id=rates_analytics.fixed_rate_bond_panel.error_prefix_id),
+                dcc.Store(id=rates_analytics.floating_rate_bond_panel.error_prefix_id),
+                dcc.Store(id=rates_analytics.zero_coupon_bond_panel.error_prefix_id),
+                dcc.Store(id=rates_analytics.ois_mid_curve_panel.error_prefix_id),
+
+                html.Div(
+                    id="error-banner"
+                ),
+
                 # ===== Divider =====
                 html.Hr(className="divider"),
+
 
                 # ===== Main content =====
                 dbc.Row(
@@ -140,7 +151,21 @@ class RatesAnalytics:
                     children=[
                         # ---- Left: Curve Market Data ----
                         dbc.Col(
-                            self.curve_market_data_panel.layout(),
+                            html.Div(
+                                [
+                                    self.curve_market_data_panel.layout(),
+                                    html.Div(
+                                        "double-click quote to update the market data",
+                                        style={
+                                            "fontSize": "12px",
+                                            "color": "#cccccc",
+                                            "marginTop": "4px",
+                                            "textAlign": "center",
+                                        },
+                                    ),
+                                ],
+                                style={"display": "flex", "flexDirection": "column"}
+                            ),
                             width="auto",
                             style={
                                 "minWidth": "280px",
@@ -167,9 +192,13 @@ class RatesAnalytics:
             ],
         )
 
+def on_error(err):
+    return {"message": str(err)}
+
 # -----------------------------
 # Main
 # -----------------------------
+
 
 if __name__ == '__main__':
 
@@ -220,9 +249,29 @@ if __name__ == '__main__':
 
         return f'Evaluation Date: {business_date_py}', bond_portal_curve_dict, index_fixings
 
+
+    @app.callback(
+        Output("error-banner", "children"),
+        Output("error-banner", "style"),
+        Input(rates_analytics.curve_chart_panel.error_prefix_id, "data"),
+        Input(rates_analytics.fixed_rate_bond_panel.error_prefix_id, "data"),
+        Input(rates_analytics.floating_rate_bond_panel.error_prefix_id, "data"),
+        Input(rates_analytics.zero_coupon_bond_panel.error_prefix_id, "data"),
+        Input(rates_analytics.ois_mid_curve_panel.error_prefix_id, "data"),
+    )
+    def set_global_error(*errors):
+        for err in errors:
+            if err:
+                return (
+                    html.Span(err["message"], style={"color": "#f75464"}),
+                    {"display": "block"},
+                )
+        return None, {}
+
     host = os.getenv("DASH_HOST", "127.0.0.1")
     port = int(os.getenv("DASH_PORT", "8050"))
     debug = os.getenv("DASH_DEBUG", "true").lower() == "true"
+
 
     app.run(
         host=host,

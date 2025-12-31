@@ -1,3 +1,5 @@
+import traceback
+
 import dash
 from dash import Input, Output, html, dcc, State, ctx
 import QuantLib as ql
@@ -28,6 +30,8 @@ class FixedRateBondPanel:
         # ---- IDs ----
         self.user_market_data_id = user_market_data_id
         self.bond_prefix = f"{prefix}-fixed-rate-bond"
+
+        self.error_prefix_id = f"{self.bond_prefix}-error"
 
         self.output_id = f"{self.bond_prefix}-output"
         self.day_counter_id = f"{self.bond_prefix}-day-counter-id"
@@ -274,6 +278,7 @@ class FixedRateBondPanel:
             Output(self.yield_id, "value"),
             Output(self.cashflow_data_grid_panel.row_data_id, "data"),
             Output(self.pricing_results_id, "data"),
+            Output(self.error_prefix_id, "data"),
             Input(self.discount_curve_data_id, "data"),
             Input(self.price_id, "value"),
             Input(self.yield_id, "value"),
@@ -292,55 +297,62 @@ class FixedRateBondPanel:
 
             # --- If any required data is missing, do nothing ---
             if not curve_data or not schedule or not bond_data:
-                return (dash.no_update,) * 4
+                return (dash.no_update,) * 5
 
-            # --- Build bond and curves ---
-            bond = BondUtils.get_fixed_rate_bond(schedule, bond_data)
-            curve, discount = self._build_curve(curve_data)
+            try:
+                # --- Build bond and curves ---
+                bond = BondUtils.get_fixed_rate_bond(schedule, bond_data)
+                curve, discount = self._build_curve(curve_data)
 
-            comp = schedule["Compounding"]
-            freq = schedule["Frequency"]
-            dc = bond_data["DayCounter"]
+                comp = schedule["Compounding"]
+                freq = schedule["Frequency"]
+                dc = bond_data["DayCounter"]
 
-            trigger = ctx.triggered_id
+                trigger = ctx.triggered_id
 
-            # --- Determine price and yield ---
-            if trigger is None:
-                # Initial load: set price to 100 and calculate yield
-                price = BondUtils.PAR
-                yield_out = round(
-                    self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                # --- Determine price and yield ---
+                if trigger is None:
+                    # Initial load: set price to 100 and calculate yield
+                    price = BondUtils.PAR
+                    yield_out = round(
+                        self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                    )
+                elif trigger == self.price_id:
+                    # User updated price: recalc yield
+                    price = price or BondUtils.PAR
+                    yield_out = round(
+                        self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                    )
+                elif trigger == self.yield_id:
+                    # User updated yield: recalc price
+                    clean_price = bond.cleanPrice(
+                        yield_in / CurveUtils.RATE_FACTOR,
+                        ConvertUtils.day_counter_from_string(dc),
+                        ConvertUtils.enum_from_string(comp),
+                        ConvertUtils.enum_from_string(freq),
+                    )
+                    price = ComponentUtils.round_to_rational_fraction(BondUtils.PRICE_TICK_SIZE, clean_price)
+                    yield_out = dash.no_update
+                else:
+                    # Any other trigger (schedule change, bond setup, tenor): keep price, recalc yield
+                    price = price or BondUtils.PAR
+                    yield_out = round(
+                        self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                    )
+
+                # --- Compute pricing results and cashflows ---
+                pricing = BondUtils.get_pricing_results(
+                    curve, discount, bond, price, dc, comp, freq
                 )
-            elif trigger == self.price_id:
-                # User updated price: recalc yield
-                price = price or BondUtils.PAR
-                yield_out = round(
-                    self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
-                )
-            elif trigger == self.yield_id:
-                # User updated yield: recalc price
-                clean_price = bond.cleanPrice(
-                    yield_in / CurveUtils.RATE_FACTOR,
-                    ConvertUtils.day_counter_from_string(dc),
-                    ConvertUtils.enum_from_string(comp),
-                    ConvertUtils.enum_from_string(freq),
-                )
-                price = ComponentUtils.round_to_rational_fraction(BondUtils.PRICE_TICK_SIZE, clean_price)
-                yield_out = dash.no_update
-            else:
-                # Any other trigger (schedule change, bond setup, tenor): keep price, recalc yield
-                price = price or BondUtils.PAR
-                yield_out = round(
-                    self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
-                )
+                cashflows = BondUtils.get_cashflows(bond)
 
-            # --- Compute pricing results and cashflows ---
-            pricing = BondUtils.get_pricing_results(
-                curve, discount, bond, price, dc, comp, freq
-            )
-            cashflows = BondUtils.get_cashflows(bond)
+                return price, yield_out, cashflows, pricing, None
 
-            return price, yield_out, cashflows, pricing
+            except Exception as e:
+                return (dash.no_update,) * 4, {
+                    "message": str(e),
+                    "traceback": traceback.format_exc(),
+                }
 
         @self.app.callback(
             Output(self.pricing_results_data_grid_panel.row_data_id, "data"),

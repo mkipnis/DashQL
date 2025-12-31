@@ -1,3 +1,5 @@
+import traceback
+
 import dash
 import dash_ag_grid as dag
 from dash import Input, Output, html, dcc, State, ctx
@@ -18,6 +20,8 @@ class FloatingRateBondPanel:
         self.bond_prefix = f"{prefix}-floating-rate-bond"
         self.output_id = f"{self.bond_prefix}-output"
         self.day_counter_id = f"{self.bond_prefix}-day-counter-id"
+
+        self.error_prefix_id = f"{self.bond_prefix}-error"
 
         # Panels
         self.schedule_panel = SchedulePanel.SchedulePanel(self.app, self.bond_prefix)
@@ -214,6 +218,7 @@ class FloatingRateBondPanel:
             Output(self.yield_id, "value"),
             Output(self.cashflow_data_grid_panel.row_data_id, "data"),
             Output(self.pricing_results_id, "data"),
+            Output(self.error_prefix_id, "data"),
             Input(self.forecast_curve_data_id, "data"),
             Input(self.discount_curve_data_id, "data"),
             Input("index-fixings", "data"),
@@ -226,60 +231,67 @@ class FloatingRateBondPanel:
         )
         def on_reprice(forecast_curve_data, discount_curve_data, index_fixings, price, yield_in, spread, schedule, bond_data, _):
             if not (forecast_curve_data and discount_curve_data and schedule and bond_data):
-                return (dash.no_update,) * 4
+                return (dash.no_update,) * 5
 
             trigger = ctx.triggered_id
             overnight_leg = bond_data["overnight_leg"]
             floating_rate_bond = bond_data["floating_rate_bond"]
 
-            if trigger == self.spread_id:
-                overnight_leg["spreads"] = [spread/CurveUtils.BPS_FACTOR]
-                bond_data["overnight_leg"] = overnight_leg
+            try:
+                if trigger == self.spread_id:
+                    overnight_leg["spreads"] = [spread/CurveUtils.BPS_FACTOR]
+                    bond_data["overnight_leg"] = overnight_leg
 
-            bond = BondUtils.get_floating_rate_bond(forecast_curve_data, index_fixings, schedule, overnight_leg, floating_rate_bond)
-            day_counter = forecast_curve_data["Curve"]["DayCounter"]
+                bond = BondUtils.get_floating_rate_bond(forecast_curve_data, index_fixings, schedule, overnight_leg, floating_rate_bond)
+                day_counter = forecast_curve_data["Curve"]["DayCounter"]
 
-            curve, discount = CurveUtils.bootstrap(CurveUtils.create_rate_helpers(discount_curve_data["MarketData"]))
+                curve, discount = CurveUtils.bootstrap(CurveUtils.create_rate_helpers(discount_curve_data["MarketData"]))
 
-            if trigger in [self.schedule_panel.output_id, self.tenor_panel.tenor_id,
+                if trigger in [self.schedule_panel.output_id, self.tenor_panel.tenor_id,
                            "index-fixings",self.forecast_curve_data_id,
                            self.discount_curve_data_id, self.bond_prefix]:
-                clean_price = ql.BondPrice(BondUtils.PAR, ql.BondPrice.Clean)
-                yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
+                    clean_price = ql.BondPrice(BondUtils.PAR, ql.BondPrice.Clean)
+                    yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
                                            ConvertUtils.enum_from_string(schedule["Compounding"]),
                                            ConvertUtils.enum_from_string(schedule["Frequency"]))
-                pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
+                    pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                return BondUtils.PAR, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing
+                    return BondUtils.PAR, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
 
-            if trigger == self.price_id:
-                clean_price = ql.BondPrice(price, ql.BondPrice.Clean)
-                yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
+                if trigger == self.price_id:
+                    clean_price = ql.BondPrice(price, ql.BondPrice.Clean)
+                    yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
                                            ConvertUtils.enum_from_string(schedule["Compounding"]),
                                            ConvertUtils.enum_from_string(schedule["Frequency"]))
-                pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
+                    pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                return dash.no_update, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing
+                    return dash.no_update, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
 
-            if trigger == self.yield_id:
-                clean_price = bond.cleanPrice(yield_in /  CurveUtils.RATE_FACTOR, ConvertUtils.day_counter_from_string(day_counter),
+                if trigger == self.yield_id:
+                    clean_price = bond.cleanPrice(yield_in /  CurveUtils.RATE_FACTOR, ConvertUtils.day_counter_from_string(day_counter),
                                               ConvertUtils.enum_from_string(schedule["Compounding"]),
                                               ConvertUtils.enum_from_string(schedule["Frequency"]))
-                pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price,
+                    pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price,
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                return ComponentUtils.round_to_rational_fraction(BondUtils.PRICE_TICK_SIZE, clean_price), dash.no_update, BondUtils.get_cashflows(bond), pricing
+                    return ComponentUtils.round_to_rational_fraction(BondUtils.PRICE_TICK_SIZE, clean_price), dash.no_update, BondUtils.get_cashflows(bond), pricing, None
 
-            # Spread trigger just recalculates pricing
-            if trigger == self.spread_id:
-                clean_price = ql.BondPrice(price if price else BondUtils.PAR, ql.BondPrice.Clean)
-                yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
+                # Spread trigger just recalculates pricing
+                if trigger == self.spread_id:
+                    clean_price = ql.BondPrice(price if price else BondUtils.PAR, ql.BondPrice.Clean)
+                    yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
                                            ConvertUtils.enum_from_string(schedule["Compounding"]),
                                            ConvertUtils.enum_from_string(schedule["Frequency"]))
-                pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
+                    pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                return dash.no_update, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing
+                    return dash.no_update, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
 
-            return dash.no_update, dash.no_update, dash.no_update, dash.no_update
+                return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+
+            except Exception as e:
+                return (dash.no_update,) * 4, {
+                    "message": str(e),
+                    "traceback": traceback.format_exc(),
+                }
 
         # --- Pricing results grid ---
         @self.app.callback(
