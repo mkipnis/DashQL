@@ -1,12 +1,13 @@
 version: "3.9"
 
 services:
-  dash:
+  dash-rates:
     build: .
     ports:
       - "8050:8050"
     volumes:
       - .:/app
     environment:
+      - DASH_DEBUG=false
       - DASH_HOST=0.0.0.0
       - PYTHONUNBUFFERED=1
