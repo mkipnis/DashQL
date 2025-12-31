@@ -178,7 +178,7 @@ class ZeroCouponBondPanel:
 
                 # ---- Global stores ----
                 dcc.Store(id=self.bond_prefix),
-                dcc.Store(id="curve_market_data"),
+                #dcc.Store(id="curve_market_data"),
             ]
         )
 

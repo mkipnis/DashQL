@@ -1,5 +1,6 @@
 import json
 import inspect
+import os
 from datetime import datetime
 
 import QuantLib as ql
@@ -85,7 +86,7 @@ class RatesAnalytics:
                                         ]
                                     ),
                                     dcc.Tab(
-                                        label='OIS/MidCurve',
+                                        label='OIS/MidCurves',
                                         className="custom-tab",
                                         selected_className="custom-tab--selected",
                                         children=[
@@ -219,4 +220,12 @@ if __name__ == '__main__':
 
         return f'Evaluation Date: {business_date_py}', bond_portal_curve_dict, index_fixings
 
-    app.run(host="0.0.0.0", debug=True)
+    host = os.getenv("DASH_HOST", "127.0.0.1")
+    port = int(os.getenv("DASH_PORT", "8050"))
+    debug = os.getenv("DASH_DEBUG", "true").lower() == "true"
+
+    app.run(
+        host=host,
+        port=port,
+        debug=debug,
+    )

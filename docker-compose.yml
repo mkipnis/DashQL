@@ -8,4 +8,5 @@ services:
     volumes:
       - .:/app
     environment:
+      - DASH_HOST=0.0.0.0
       - PYTHONUNBUFFERED=1

@@ -8,9 +8,9 @@
         "Schedule":{"Frequency": "Semiannual", "Calendars": ["UnitedStates_GovernmentBond"], "BusDayConv": "ModifiedFollowing", "TermBusDayConv": "ModifiedFollowing",
         "Compounding": "Compounded", "DateGeneration": "Backward", "endOfMonth": false}},
     "CurveComponents": [
-      {"Type": "Deposit", "Tenor": "1M", "Quote": 1.6343, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
-      {"Type": "Deposit", "Tenor": "3M", "Quote": 1.6345, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
-      {"Type": "Deposit", "Tenor": "6M", "Quote": 2.6734, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
+      {"Type": "Deposit", "Tenor": "1M", "Quote": 1.343, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
+      {"Type": "Deposit", "Tenor": "3M", "Quote": 1.9345, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
+      {"Type": "Deposit", "Tenor": "6M", "Quote": 2.4534, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
       {"Type": "Deposit", "Tenor": "1Y", "Quote": 2.7234, "Calendars": ["TARGET"], "DayCounter": "Actual360", "SettlementDays": 2, "endOfMonth": false, "BusDayConv": "ModifiedFollowing"},
       {"Type": "Bond", "Tenor": "2Y", "Quote": 100.625,
         "FixedRateBond": {"Coupon": 3.5, "SettlementDays": 1, "DayCounter": "ActualActual_Bond"},
@@ -81,9 +81,9 @@
       {"Type": "Swap", "Tenor": "3Y", "Quote": 4.25, "SettlementDays": 2},
       {"Type": "Swap", "Tenor": "5Y", "Quote": 4.6423, "SettlementDays": 2},
       {"Type": "Swap", "Tenor": "10Y", "Quote": 4.965, "SettlementDays": 2},
-      {"Type": "Swap", "Tenor": "15Y", "Quote": 5.6175, "SettlementDays": 2},
-      {"Type": "Swap", "Tenor": "20Y", "Quote": 5.5185, "SettlementDays": 2},
-      {"Type": "Swap", "Tenor": "30Y", "Quote": 5.2195, "SettlementDays": 2}
+      {"Type": "Swap", "Tenor": "15Y", "Quote": 5.4175, "SettlementDays": 2},
+      {"Type": "Swap", "Tenor": "20Y", "Quote": 5.8185, "SettlementDays": 2},
+      {"Type": "Swap", "Tenor": "30Y", "Quote": 5.9195, "SettlementDays": 2}
     ]
   }
 ]

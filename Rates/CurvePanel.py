@@ -42,7 +42,7 @@ class CurvePanel:
             curve, discount_curve = CurveUtils.bootstrap(rate_helpers)
             day_counter = discount_curve_data["Curve"]["DayCounter"]
 
-            curve_tenors = ["6M"]
+            curve_tenors = ["1M", "3M", "6M"]
 
             for curve_tenor in range(1, 31):  # 1 to 30 inclusive
                 swap_curve_tenor = f"{curve_tenor}Y"

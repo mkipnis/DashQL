@@ -149,7 +149,7 @@ class FloatingRateBondPanel:
                 ),
                 dcc.Store(id=self.bond_prefix),
                 dcc.Store(id=self.output_id),
-                dcc.Store(id="curve_market_data"),
+                #dcc.Store(id="curve_market_data"),
             ]
         )
 
@@ -241,7 +241,9 @@ class FloatingRateBondPanel:
 
             curve, discount = CurveUtils.bootstrap(CurveUtils.create_rate_helpers(discount_curve_data["MarketData"]))
 
-            if trigger in [self.schedule_panel.output_id, self.tenor_panel.tenor_id, "index-fixings",self.forecast_curve_data_id, self.discount_curve_data_id]:
+            if trigger in [self.schedule_panel.output_id, self.tenor_panel.tenor_id,
+                           "index-fixings",self.forecast_curve_data_id,
+                           self.discount_curve_data_id, self.bond_prefix]:
                 clean_price = ql.BondPrice(BondUtils.PAR, ql.BondPrice.Clean)
                 yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
                                            ConvertUtils.enum_from_string(schedule["Compounding"]),

@@ -9,5 +9,5 @@ pip install -r requirements.txt
 
 ```
 docker build -t rates-app .
-docker run -p 8050:8050 rates-app
+docker run -e DASH_HOST=0.0.0.0 -p 8050:8050 rates-app
 ```
