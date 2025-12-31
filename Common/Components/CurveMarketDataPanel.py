@@ -94,7 +94,6 @@ class CurveMarketDataPanel(object):
             ),
             self.grid,
             dcc.Store(id=self.user_market_data_id),
-            dcc.Store(id="portal-curves")
     ])
 
 
