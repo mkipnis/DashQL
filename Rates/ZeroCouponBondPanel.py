@@ -233,7 +233,7 @@ class ZeroCouponBondPanel:
                 for bond in zeros:
                     engine = ql.DiscountingBondEngine(discount_curve)
                     bond.setPricingEngine(engine)
-                    if bond.isExpired():
+                    if bond.isExpired() or bond.settlementDate() > bond.maturityDate():
                         continue
                     pricing_results = BondUtils.get_pricing_results(
                         curve, discount_curve, bond, bond.cleanPrice(),
