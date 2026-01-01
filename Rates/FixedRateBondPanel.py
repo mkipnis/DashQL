@@ -4,11 +4,12 @@ import dash
 from dash import Input, Output, html, dcc, State, ctx
 import QuantLib as ql
 
+from Common.Utils.Constants import PricingConstants, RoundingConstants
 from Common.Utils import (
     ComponentUtils,
     CurveUtils,
     ConvertUtils,
-    BondUtils,
+    BondUtils
 )
 from Common.Components import (
     SchedulePanel,
@@ -102,8 +103,8 @@ class FixedRateBondPanel:
                 ),
                 self.tenor_panel.layout(),
                 dcc.Store(id=self.discount_curve_data_id),
-                ComponentUtils.labeled_number_input("Coupon", self.coupon_id, step=BondUtils.COUPON_TICK_SIZE),
-                ComponentUtils.labeled_number_input("Price", self.price_id, step=BondUtils.PRICE_TICK_SIZE),
+                ComponentUtils.labeled_number_input("Coupon", self.coupon_id, step=PricingConstants.COUPON_TICK_SIZE),
+                ComponentUtils.labeled_number_input("Price", self.price_id, step=PricingConstants.PRICE_TICK_SIZE),
                 ComponentUtils.labeled_number_input("Yield", self.yield_id, step=0.001),
                 ComponentUtils.labeled_number_input(
                     "Settlement Days", self.settlement_days_id, value=1, step=1
@@ -253,7 +254,7 @@ class FixedRateBondPanel:
                 ql.Compounded,
                 ql.Semiannual,
             )
-            return ComponentUtils.round_to_rational_fraction(BondUtils.COUPON_TICK_SIZE, zero.rate() * CurveUtils.RATE_FACTOR)
+            return ComponentUtils.round_to_rational_fraction(PricingConstants.COUPON_TICK_SIZE, zero.rate() * PricingConstants.RATE_FACTOR)
 
         @self.app.callback(
             Output(self.bond_prefix, "data"),
@@ -267,7 +268,7 @@ class FixedRateBondPanel:
                 return dash.no_update
 
             return {
-                "Coupon": [coupon / CurveUtils.RATE_FACTOR],
+                "Coupon": [coupon / PricingConstants.RATE_FACTOR],
                 "SettlementDays": settlement_days,
                 "DayCounter": day_counter,
                 "FaceAmount": notional,
@@ -313,31 +314,31 @@ class FixedRateBondPanel:
                 # --- Determine price and yield ---
                 if trigger is None:
                     # Initial load: set price to 100 and calculate yield
-                    price = BondUtils.PAR
+                    price = PricingConstants.PAR
                     yield_out = round(
-                        self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                        self._bond_yield(bond, price, dc, comp, freq) * PricingConstants.RATE_FACTOR, PricingConstants.ROUND_RATE
                     )
                 elif trigger == self.price_id:
                     # User updated price: recalc yield
-                    price = price or BondUtils.PAR
+                    price = price or PricingConstants.PAR
                     yield_out = round(
-                        self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                        self._bond_yield(bond, price, dc, comp, freq) * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE
                     )
                 elif trigger == self.yield_id:
                     # User updated yield: recalc price
                     clean_price = bond.cleanPrice(
-                        yield_in / CurveUtils.RATE_FACTOR,
+                        yield_in / PricingConstants.RATE_FACTOR,
                         ConvertUtils.day_counter_from_string(dc),
                         ConvertUtils.enum_from_string(comp),
                         ConvertUtils.enum_from_string(freq),
                     )
-                    price = ComponentUtils.round_to_rational_fraction(BondUtils.PRICE_TICK_SIZE, clean_price)
+                    price = ComponentUtils.round_to_rational_fraction(PricingConstants.PRICE_TICK_SIZE, clean_price)
                     yield_out = dash.no_update
                 else:
                     # Any other trigger (schedule change, bond setup, tenor): keep price, recalc yield
-                    price = price or BondUtils.PAR
+                    price = price or PricingConstants.PAR
                     yield_out = round(
-                        self._bond_yield(bond, price, dc, comp, freq) * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE
+                        self._bond_yield(bond, price, dc, comp, freq) * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE
                     )
 
                 # --- Compute pricing results and cashflows ---

@@ -2,15 +2,12 @@ from concurrent.futures import ThreadPoolExecutor
 
 import QuantLib as ql
 from Common.Utils import ConvertUtils
+from Common.Utils.Constants import PricingConstants, RoundingConstants
 from datetime import date
 
 from Common.Utils import BondUtils
+from enum import Enum
 
-RATE_FACTOR = 100.0
-BPS_FACTOR = RATE_FACTOR * 100.0
-
-ROUND_RATE = 3
-ROUND_SPREAD = 1
 
 def create_rate_helpers( market_data: list):
     deposit_quotes = {}
@@ -24,13 +21,13 @@ def create_rate_helpers( market_data: list):
         tenor = instrument_quote['tenor']
 
         if instrument_type == 'Deposit':
-            deposit_quotes[ql.Period(tenor[0], tenor[1])] = {'pricer_quote':ql.SimpleQuote(quote / RATE_FACTOR), 'quote_details':instrument_quote['curve_component']}
+            deposit_quotes[ql.Period(tenor[0], tenor[1])] = {'pricer_quote':ql.SimpleQuote(quote / PricingConstants.RATE_FACTOR), 'quote_details':instrument_quote['curve_component']}
         elif instrument_type == 'Future':
             py_date = date.fromisoformat(tenor)
             ql_date = ql.Date(py_date.day, py_date.month, py_date.year)
             future_quotes[ql_date] = {'pricer_quote':ql.SimpleQuote(quote), 'quote_details':instrument_quote['curve_component']}
         elif instrument_type == 'Swap':
-            swap_quotes[ql.Period(tenor[0], tenor[1])] = {'pricer_quote': ql.SimpleQuote(quote / RATE_FACTOR), 'quote_details':instrument_quote['curve_component']}
+            swap_quotes[ql.Period(tenor[0], tenor[1])] = {'pricer_quote': ql.SimpleQuote(quote / PricingConstants.RATE_FACTOR), 'quote_details':instrument_quote['curve_component']}
         elif instrument_type == 'Bond':
             bond_quotes[ql.Period(tenor[0], tenor[1])] = {'pricer_quote': ql.SimpleQuote(quote),
                                                           'quote_details': instrument_quote['curve_component']}
@@ -148,9 +145,9 @@ def bootstrap(quotes):
         # Build bond object
         bond = ql.FixedRateBond(
             bond_info["SettlementDays"],
-            BondUtils.PAR,
+            PricingConstants.PAR,
             ql_schedule,
-            [bond_info["Coupon"]/RATE_FACTOR],
+            [bond_info["Coupon"]/PricingConstants.RATE_FACTOR],
             ConvertUtils.day_counter_from_string(bond_info["DayCounter"])
         )
 
@@ -206,7 +203,7 @@ def transform_index_fixings(fixings):
         for fixing in index_fixings:
             fixing_date = calendar.advance(ql.Date.todaysDate(), ql.Period(fixing['date_index'], ql.Days))
             transformed_index_fixings[index['Index']].append({'fixing_date': fixing_date.to_date().isoformat(),
-                                                              'rate':fixing['rate']/RATE_FACTOR})
+                                                              'rate':fixing['rate']/PricingConstants.RATE_FACTOR})
 
     return transformed_index_fixings
 
@@ -223,7 +220,7 @@ def price_ois_curve(index: str, discount_curve, curve_tenors):
 
     # Run computations in parallel
     with ThreadPoolExecutor() as executor:
-        results = executor.map(lambda item: (item[0], item[1].fairRate() * RATE_FACTOR), ois_swaps.items())
+        results = executor.map(lambda item: (item[0], item[1].fairRate() * PricingConstants.RATE_FACTOR), ois_swaps.items())
 
     tenors = []
     rates = []
@@ -259,7 +256,7 @@ def price_yield_curve(default_bond_setup, discount_curve, curve_tenors):
                     ql_compounding,
                     ql_frequency,
                 )
-                .rate() * RATE_FACTOR
+                .rate() * PricingConstants.RATE_FACTOR
             ),
             curve_tenors,
         )
@@ -294,7 +291,7 @@ def price_mid_curve(index, forecast_curve, swap_tenors, forward_start_tenors):
         with ThreadPoolExecutor() as executor:
             midcurve_results = dict(
                 executor.map(
-                    lambda item: (item[0], round(item[1].fairRate() * RATE_FACTOR, ROUND_RATE)),
+                    lambda item: (item[0], round(item[1].fairRate() * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE)),
                     ois_midcurves[curve_tenor].items()
                 )
             )

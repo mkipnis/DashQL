@@ -8,6 +8,7 @@ import QuantLib as ql
 
 from Common.Components import DataGridPanel, SchedulePanel, TenorPanel
 from Common.Utils import ComponentUtils, CurveUtils, ConvertUtils, BondUtils
+from Common.Utils.Constants import PricingConstants, RoundingConstants
 
 
 class FloatingRateBondPanel:
@@ -90,7 +91,7 @@ class FloatingRateBondPanel:
                 self.tenor_panel.layout(),
                 ComponentUtils.labeled_number_input("Spread(BPS)", self.spread_id, step=1),
                 ComponentUtils.labeled_number_input("Payment Lag", self.payment_lag_id, value=2, step=1),
-                ComponentUtils.labeled_number_input("Price", self.price_id, step=BondUtils.PRICE_TICK_SIZE),
+                ComponentUtils.labeled_number_input("Price", self.price_id, step=PricingConstants.PRICE_TICK_SIZE),
                 ComponentUtils.labeled_number_input("Yield", self.yield_id, step=0.001),
                 ComponentUtils.labeled_number_input("Settlement Days", self.settlement_days_id, value=1, step=1),
                 ComponentUtils.labeled_number_input("Notional", self.notional_id, value=10000, step=1000),
@@ -208,7 +209,7 @@ class FloatingRateBondPanel:
         def on_bond_setup(spread, settlement_days, notional, payment_lag):
             if None in (spread, settlement_days, notional, payment_lag):
                 return dash.no_update
-            overnight_leg = {"nominals": [notional], "spreads": [spread/CurveUtils.BPS_FACTOR], "paymentLag": payment_lag}
+            overnight_leg = {"nominals": [notional], "spreads": [spread/PricingConstants.BPS_FACTOR], "paymentLag": payment_lag}
             floating_rate_bond = {"SettlementDays": settlement_days}
             return {"overnight_leg": overnight_leg, "floating_rate_bond": floating_rate_bond}
 
@@ -239,7 +240,7 @@ class FloatingRateBondPanel:
 
             try:
                 if trigger == self.spread_id:
-                    overnight_leg["spreads"] = [spread/CurveUtils.BPS_FACTOR]
+                    overnight_leg["spreads"] = [spread/PricingConstants.BPS_FACTOR]
                     bond_data["overnight_leg"] = overnight_leg
 
                 bond = BondUtils.get_floating_rate_bond(forecast_curve_data, index_fixings, schedule, overnight_leg, floating_rate_bond)
@@ -250,13 +251,13 @@ class FloatingRateBondPanel:
                 if trigger in [self.schedule_panel.output_id, self.tenor_panel.tenor_id,
                            "index-fixings",self.forecast_curve_data_id,
                            self.discount_curve_data_id, self.bond_prefix]:
-                    clean_price = ql.BondPrice(BondUtils.PAR, ql.BondPrice.Clean)
+                    clean_price = ql.BondPrice(PricingConstants.PAR, ql.BondPrice.Clean)
                     yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
                                            ConvertUtils.enum_from_string(schedule["Compounding"]),
                                            ConvertUtils.enum_from_string(schedule["Frequency"]))
                     pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                    return BondUtils.PAR, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
+                    return PricingConstants.PAR, round(yield_out * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
 
                 if trigger == self.price_id:
                     clean_price = ql.BondPrice(price, ql.BondPrice.Clean)
@@ -265,25 +266,26 @@ class FloatingRateBondPanel:
                                            ConvertUtils.enum_from_string(schedule["Frequency"]))
                     pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                    return dash.no_update, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
+                    return (dash.no_update, round(yield_out * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE),
+                            BondUtils.get_cashflows(bond), pricing, None)
 
                 if trigger == self.yield_id:
-                    clean_price = bond.cleanPrice(yield_in /  CurveUtils.RATE_FACTOR, ConvertUtils.day_counter_from_string(day_counter),
+                    clean_price = bond.cleanPrice(yield_in /  PricingConstants.RATE_FACTOR, ConvertUtils.day_counter_from_string(day_counter),
                                               ConvertUtils.enum_from_string(schedule["Compounding"]),
                                               ConvertUtils.enum_from_string(schedule["Frequency"]))
                     pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price,
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                    return ComponentUtils.round_to_rational_fraction(BondUtils.PRICE_TICK_SIZE, clean_price), dash.no_update, BondUtils.get_cashflows(bond), pricing, None
+                    return ComponentUtils.round_to_rational_fraction(PricingConstants.PRICE_TICK_SIZE, clean_price), dash.no_update, BondUtils.get_cashflows(bond), pricing, None
 
                 # Spread trigger just recalculates pricing
                 if trigger == self.spread_id:
-                    clean_price = ql.BondPrice(price if price else BondUtils.PAR, ql.BondPrice.Clean)
+                    clean_price = ql.BondPrice(price if price else PricingConstants.PAR, ql.BondPrice.Clean)
                     yield_out = bond.bondYield(clean_price, ConvertUtils.day_counter_from_string(day_counter),
                                            ConvertUtils.enum_from_string(schedule["Compounding"]),
                                            ConvertUtils.enum_from_string(schedule["Frequency"]))
                     pricing = BondUtils.get_pricing_results(curve, discount, bond, clean_price.amount(),
                                                        day_counter, schedule["Compounding"], schedule["Frequency"])
-                    return dash.no_update, round(yield_out * CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
+                    return dash.no_update, round(yield_out * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE), BondUtils.get_cashflows(bond), pricing, None
 
                 return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 

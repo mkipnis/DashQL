@@ -1,14 +1,8 @@
 import QuantLib as ql
 import Common.Utils.ConvertUtils as ConvertUtils
 import Common.Utils.CurveUtils as CurveUtils
+from Common.Utils.Constants import PricingConstants, RoundingConstants
 
-PAR = 100
-PRICE_TICK_SIZE = 1/32
-COUPON_TICK_SIZE = 1/8
-ROUND_PRICE = 6
-ROUND_MONEY = 2
-
-ROUND_YEARS = 2
 
 def get_fixed_rate_bond(schedule, bond_info):
 
@@ -108,15 +102,6 @@ def get_zeros(schedule, bond_info):
                 maturityDate=cash_flow_date,
             )
         )
-        #print(d.to_date().isoformat())
-    # Build bond object
-    #bond = ql.FixedRateBond(
-    #    bond_info["SettlementDays"],
-    #    bond_info["FaceAmount"],
-    #    ql_schedule,
-    #    bond_info["Coupon"],
-    #    ConvertUtils.day_counter_from_string(bond_info["DayCounter"])
-    #)
 
     return zero_coupon_bonds
 
@@ -125,7 +110,9 @@ def get_cashflows(bond):
     for cf in bond.cashflows():
         c = ql.as_coupon(cf)
         if c is not None:
-            data.append({'business_date':c.date().ISO(), 'nominal':c.nominal(), 'rate':round(c.rate()*CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE), 'amount': round(c.amount(), ROUND_MONEY)})
+            data.append({'business_date':c.date().ISO(), 'nominal':c.nominal(),
+                         'rate':round(c.rate() * PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE),
+                         'amount': round(c.amount(), RoundingConstants.ROUND_MONEY)})
         else:
             data.append({'business_date':cf.date().ISO(), 'nominal':None, 'rate':None, 'amount':cf.amount()})
 
@@ -167,16 +154,17 @@ def get_pricing_results(
     )
 
     results['Maturity Date'] = bond.maturityDate().ISO()
-    results['Yield'] = round(yield_rate.rate()*CurveUtils.RATE_FACTOR, CurveUtils.ROUND_RATE)
-    results['Price(Curve)'] = round(bond.cleanPrice(), ROUND_PRICE)
-    results['Full-Price(Curve)'] = round(bond.dirtyPrice(), ROUND_PRICE)
-    results['Z-Spread(BPS)'] = round(zspread * CurveUtils.BPS_FACTOR, CurveUtils.ROUND_SPREAD)
-    results['DV01'] = round(ql.BondFunctions.basisPointValue(bond, yield_rate), ROUND_MONEY)
-    results['NPV'] = round(bond.NPV(), ROUND_MONEY)
-    results['Modified Duration'] = round(ql.BondFunctions.duration(bond,yield_rate), ROUND_YEARS)
-    results['Macaulay Duration'] = round(ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay), ROUND_YEARS)
-    results['Convexity'] = round(ql.BondFunctions.convexity(bond, yield_rate), ROUND_MONEY)
-    results['Accrued Interest'] = round(bond.accruedAmount(), ROUND_PRICE)
+    results['Yield'] = round(yield_rate.rate()*PricingConstants.RATE_FACTOR, RoundingConstants.ROUND_RATE)
+    results['Price(Curve)'] = round(bond.cleanPrice(), RoundingConstants.ROUND_PRICE)
+    results['Full-Price(Curve)'] = round(bond.dirtyPrice(), RoundingConstants.ROUND_PRICE)
+    results['Z-Spread(BPS)'] = round(zspread * PricingConstants.BPS_FACTOR, RoundingConstants.ROUND_SPREAD)
+    results['DV01'] = round(ql.BondFunctions.basisPointValue(bond, yield_rate), RoundingConstants.ROUND_MONEY)
+    results['NPV'] = round(bond.NPV(), RoundingConstants.ROUND_MONEY)
+    results['Modified Duration'] = round(ql.BondFunctions.duration(bond,yield_rate), RoundingConstants.ROUND_YEARS)
+    results['Macaulay Duration'] = round(ql.BondFunctions.duration(bond, yield_rate, ql.Duration.Macaulay),
+                                         RoundingConstants.ROUND_YEARS)
+    results['Convexity'] = round(ql.BondFunctions.convexity(bond, yield_rate), RoundingConstants.ROUND_MONEY)
+    results['Accrued Interest'] = round(bond.accruedAmount(), RoundingConstants.ROUND_PRICE)
     results['Settlement Date'] = bond.settlementDate().ISO()
     results['Notional'] = round(bond.notional())
     results['Accrued Days'] = ql.BondFunctions.accruedDays(bond)
