@@ -17,7 +17,7 @@ class CurveChartPanel(object):
                 dcc.Store(id=self.curve_chart_data_id),
                 dcc.Graph(
                 id=self.curve_chart_id,
-                style={"width": "100%", "height": "100%",
+                style={"width": "100%", "height": "400px",
                 "border": "1px solid rgba(200, 200, 200, 0.15)"}),
             ])
 

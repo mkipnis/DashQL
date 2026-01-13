@@ -60,6 +60,15 @@ class RatesAnalytics:
                             className="custom-tabs",
                             children=[
                                 dcc.Tab(
+                                    label="OIS/MidCurves",
+                                    className="custom-tab",
+                                    selected_className="custom-tab--selected",
+                                    children=html.Div(
+                                        self.ois_mid_curve_panel.layout(),
+                                        className="ag-theme-balham-dark",
+                                    ),
+                                ),
+                                dcc.Tab(
                                     label="Fixed Rate Bond",
                                     className="custom-tab",
                                     selected_className="custom-tab--selected",
@@ -85,16 +94,7 @@ class RatesAnalytics:
                                         self.zero_coupon_bond_panel.layout(),
                                         className="ag-theme-balham-dark",
                                     ),
-                                ),
-                                dcc.Tab(
-                                    label="OIS/MidCurves",
-                                    className="custom-tab",
-                                    selected_className="custom-tab--selected",
-                                    children=html.Div(
-                                        self.ois_mid_curve_panel.layout(),
-                                        className="ag-theme-balham-dark",
-                                    ),
-                                ),
+                                )
                             ],
                         )
                     ],
@@ -106,7 +106,7 @@ class RatesAnalytics:
             active_item=["bonds"],
         )
 
-        # Full layout
+        # Full layout function
         return dbc.Container(
             fluid=True,
             children=[
@@ -166,9 +166,40 @@ class RatesAnalytics:
                             style={"minWidth": "280px", "maxWidth": "280px"},
                             className="panel-col",
                         ),
-                        # Right: Accordion
+
+                        # Right: Accordion + Support (full width)
                         dbc.Col(
-                            accordion,
+                            html.Div(
+                                [
+                                    accordion,  # existing accordion
+                                    # Support section under accordion
+                                    html.Div(
+                                        [
+                                            "For support, contact: ",
+                                            html.A(
+                                                "mike.kipnis@gmail.com",
+                                                href="mailto:mike.kipnis@gmail.com",
+                                                style={
+                                                    "textDecoration": "underline",
+                                                    "color": "#AAAAAA",
+                                                },
+                                            ),
+                                        ],
+                                        style={
+                                            "fontSize": "12px",
+                                            "color": "#AAAAAA",
+                                            "marginTop": "8px",
+                                            "textAlign": "center",  # center horizontally
+                                            "width": "100%",  # make full width
+                                        },
+                                    ),
+                                ],
+                                style={
+                                    "display": "flex",
+                                    "flexDirection": "column",
+                                    "width": "100%",  # container full width
+                                },
+                            ),
                             style={"flex": "1 1 auto", "minWidth": 0},
                             className="panel-col",
                         ),
