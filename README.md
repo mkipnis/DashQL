@@ -19,6 +19,7 @@ docker run -e DASH_HOST=0.0.0.0 -p 8050:8050 rates-app
 ## Use cases
 ### Curve update
 Update an individual market data input of an OIS forecast curve to trigger recalculation of all remaining curve tenors and automatic repricing of dependent mid curves.
+![Curve Market Data](data/curve_setup.json)
 
 ![Curve Update](media/curve_update.gif)
 
