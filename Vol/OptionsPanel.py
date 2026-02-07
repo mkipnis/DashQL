@@ -105,7 +105,6 @@ class OptionsPanel:
                 dcc.Store(id="risk-free-rates"),
                 dcc.Store(id=f"{self.prefix}-atm-strike"),
                 dcc.Store(id=f"{self.prefix}-symbol"),
-                dcc.Store(id=self.error_prefix_id),
                 dcc.Store(id=f"{self.prefix}-reset-scroll"),
             ],
             style={"display": "flex", "flexDirection": "column", "height": "100%"},
