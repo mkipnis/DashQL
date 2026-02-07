@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import traceback
 
 import QuantLib as ql

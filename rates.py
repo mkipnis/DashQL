@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import json
 import os
 from datetime import datetime
@@ -175,18 +177,36 @@ class RatesAnalytics:
                                     # Support section under accordion
                                     html.Div(
                                         [
-                                            "For support, contact: ",
-                                            html.A(
-                                                "mike.kipnis@gmail.com",
-                                                href="mailto:mike.kipnis@gmail.com",
+                                            html.Div(
+                                                [
+                                                    html.Span(
+                                                        [
+                                                            "For support, contact: ",
+                                                            html.A(
+                                                                "mike.kipnis@gmail.com",
+                                                                href="mailto:mike.kipnis@gmail.com",
+                                                                style={
+                                                                    "textDecoration": "underline",
+                                                                    "color": "#cccccc",
+                                                                },
+                                                            ),
+                                                        ]
+                                                    ),
+                                                    html.A(
+                                                        "https://ustreasuries.online",
+                                                        href="https://ustreasuries.online",
+                                                        style={"textDecoration": "underline"},
+                                                    ),
+                                                ],
                                                 style={
-                                                    "textDecoration": "underline",
-                                                    "color": "#AAAAAA",
+                                                    "display": "flex",
+                                                    "justifyContent": "space-between",
+                                                    "alignItems": "center",
                                                 },
-                                            ),
+                                            )
                                         ],
                                         style={
-                                            "fontSize": "12px",
+                                            "fontSize": "14px",
                                             "color": "#AAAAAA",
                                             "marginTop": "8px",
                                             "textAlign": "center",  # center horizontally

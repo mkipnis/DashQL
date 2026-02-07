@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import dash
 from dash import dcc
 from dash import Input, Output, html, dcc

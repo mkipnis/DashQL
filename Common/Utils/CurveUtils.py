@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 from concurrent.futures import ThreadPoolExecutor
 
 import QuantLib as ql

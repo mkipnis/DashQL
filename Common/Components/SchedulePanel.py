@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import datetime
 import QuantLib as ql
 import dash

@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import datetime
 from dash import html, dcc
 import QuantLib as ql

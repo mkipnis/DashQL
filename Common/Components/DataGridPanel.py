@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 from typing import Optional, Dict, Any
 
 import dash

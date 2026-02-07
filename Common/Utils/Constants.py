@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 from enum import Enum
 from typing import Any
 

@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import copy
 
 import dash
