@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import datetime
 import QuantLib as ql
 import dash
@@ -39,7 +41,8 @@ class SchedulePanel(object):
             options=ComponentUtils.dict_to_options(ConvertUtils.BusDayConv),
             value="ModifiedFollowing",
             clearable=False,
-            className="dropdown-narrow"
+            searchable=False,
+            className="dark-dropdown",
         )
 
         term_busday_dropdown = dcc.Dropdown(
@@ -47,7 +50,8 @@ class SchedulePanel(object):
             options=ComponentUtils.dict_to_options(ConvertUtils.BusDayConv),
             value="ModifiedFollowing",
             clearable=False,
-            className="dropdown-narrow"
+            searchable=False,
+            className="dark-dropdown",
         )
 
         calendar_dropdown = dcc.Dropdown(
@@ -55,9 +59,10 @@ class SchedulePanel(object):
             options=ComponentUtils.dict_to_options(ConvertUtils.Calendars),
             value="TARGET",
             clearable=False,
+            searchable=False,
             multi=True,
             closeOnSelect=False,
-            className="dropdown-narrow"
+            className="dark-dropdown",
         )
 
         compounding_dropdown = dcc.Dropdown(
@@ -65,7 +70,8 @@ class SchedulePanel(object):
             options=ComponentUtils.dict_to_options(ConvertUtils.Compounded),
             value="QuantLib.Compounded",
             clearable=False,
-            className="dropdown-narrow"
+            searchable=False,
+            className="dark-dropdown",
         )
 
         frequency_dropdown = dcc.Dropdown(
@@ -73,7 +79,8 @@ class SchedulePanel(object):
             options=ComponentUtils.dict_to_options(ConvertUtils.Frequencies),
             value="QuantLib.Semiannual",
             clearable=False,
-            className="dropdown-narrow"
+            searchable=False,
+            className="dark-dropdown",
         )
 
         dategen_dropdown = dcc.Dropdown(
@@ -81,7 +88,8 @@ class SchedulePanel(object):
             options=ComponentUtils.dict_to_options(ConvertUtils.DateGeneration),
             value="DateGeneration.Backward",
             clearable=False,
-            className="dropdown-narrow"
+            searchable=False,
+            className="dark-dropdown",
         )
 
         # ----- Layout with consistent spacing -----

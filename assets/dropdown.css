@@ -1,0 +1,144 @@
+/* =========================
+   Dash 4 Dropdown – Dark Theme & Full Width
+   ========================= */
+
+/* Wrapper: full width */
+.dash-dropdown-wrapper {
+    width: 100% !important;
+}
+
+/* =========================
+   Closed dropdown button
+   ========================= */
+button.dash-dropdown.dark-dropdown {
+    width: 100% !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* text + clear left, arrow pushed right */
+    gap: 4px;
+
+    background-color: #0f1118 !important;
+    border: 1px solid #2a2f42 !important;
+    color: white !important;
+    height: 32px;
+    padding: 4px 8px;
+    border-radius: 2px;
+    box-shadow: none !important;
+}
+
+/* Focus outline removed */
+button.dash-dropdown.dark-dropdown:focus,
+button.dash-dropdown.dark-dropdown:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Value text: fills space */
+button.dash-dropdown.dark-dropdown .dash-dropdown-value {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: white !important;
+    font-size: 14px;
+}
+
+/* Selected value item */
+button.dash-dropdown.dark-dropdown .dash-dropdown-value-item span {
+    color: white !important;
+}
+
+/* Clear (X) button: immediately after text */
+button.dash-dropdown.dark-dropdown .dash-dropdown-clear {
+    margin-left: 4px;  /* spacing from text */
+    color: #888 !important;
+    order: 2;
+}
+button.dash-dropdown.dark-dropdown .dash-dropdown-clear:hover {
+    color: white !important;
+}
+
+/* Arrow (toggle) pinned to far right */
+button.dash-dropdown.dark-dropdown .dash-dropdown-trigger-icon {
+    margin-left: auto;  /* pushes arrow to far right */
+    color: #ccc !important;
+    order: 3;
+}
+
+/* =========================
+   Popup / Portaled Menu
+   ========================= */
+
+/* Radix popper wrapper (keeps positioning) */
+div[data-radix-popper-content-wrapper] {
+    background-color: transparent !important;
+}
+
+/* Popup content: full width, aligned left under button */
+div.dash-dropdown-content {
+    background-color: #0e2537 !important;
+    border: 1px solid #2a2f42 !important;
+    border-radius: 2px !important;
+    padding: 0 !important;
+    z-index: 10000 !important;
+
+    width: var(--radix-popover-trigger-width) !important;
+    min-width: var(--radix-popover-trigger-width) !important;
+    max-width: var(--radix-popover-trigger-width) !important;
+
+    /* keep vertical positioning but align left */
+    left: 0 !important;
+    transform: translate(0, var(--radix-popover-content-transform-offset-y, 0px)) !important;
+}
+
+/* Options list inside popup */
+div.dash-options-list.dash-dropdown-options {
+    width: 100% !important;
+    background-color: #0e2537 !important;
+}
+
+/* Each option */
+label.dash-options-list-option.dash-dropdown-option {
+    background-color: #0e2537 !important;
+    color: white !important;
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover & selected states */
+label.dash-options-list-option.dash-dropdown-option:hover {
+    background-color: #123149 !important;
+}
+label.dash-options-list-option.dash-dropdown-option.selected {
+    background-color: #1a3b55 !important;
+    font-weight: 500;
+}
+
+/* Checkbox inside option (optional) */
+label.dash-options-list-option input.dash-options-list-option-checkbox {
+    accent-color: #f09d08;
+}
+
+/* =========================
+   Legacy role-based support (optional)
+   ========================= */
+div[role="listbox"].dash-dropdown-menu,
+div[role="option"].dash-dropdown-item {
+    max-height: 240px;
+    overflow-y: auto;
+    background-color: #0e2537 !important;
+    color: white !important;
+}
+div[role="option"].dash-dropdown-item[data-highlighted] {
+    background-color: #123149 !important;
+}
+div[role="option"].dash-dropdown-item[aria-selected="true"] {
+    background-color: #1a3b55 !important;
+    font-weight: 500;
+}
+div[role="option"].dash-dropdown-item[aria-disabled="true"] {
+    color: #777 !important;
+    cursor: not-allowed;
+}

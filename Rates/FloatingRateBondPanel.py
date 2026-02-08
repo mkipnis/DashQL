@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import traceback
 
 import dash
@@ -78,8 +80,16 @@ class FloatingRateBondPanel:
     def layout(self) -> html.Div:
         COLUMN_WIDTH = "300px"
 
-        discount_dropdown = dcc.Dropdown(id=self.discount_curve_id, clearable=False)
-        forecast_dropdown = dcc.Dropdown(id=self.forecast_curve_id, clearable=False)
+        discount_dropdown = dcc.Dropdown(id=self.discount_curve_id,
+                                         clearable=False,
+                                         searchable=False,
+                                         className="dark-dropdown",
+                                         )
+        forecast_dropdown = dcc.Dropdown(id=self.forecast_curve_id,
+                                         clearable=False,
+                                         searchable=False,
+                                         className="dark-dropdown",
+                                         )
 
         # ---- Bond inputs (fixed width) ----
         bond_inputs = html.Div(

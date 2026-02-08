@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import traceback
 
 import dash
@@ -88,11 +90,15 @@ class FixedRateBondPanel:
             options=ComponentUtils.dict_to_options(ConvertUtils.DayCounterNames),
             value="ActualActual_Bond",
             clearable=False,
+            searchable=False,
+            className="dark-dropdown",
         )
 
         discount_curve_dropdown = dcc.Dropdown(
             id=self.discount_curve_id,
             clearable=False,
+            searchable=False,
+            className="dark-dropdown",
         )
 
         # ---- Bond inputs (fixed width) ----

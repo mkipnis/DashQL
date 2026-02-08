@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import traceback
 
 import QuantLib as ql
@@ -82,11 +84,15 @@ class ZeroCouponBondPanel:
             options=ComponentUtils.dict_to_options(ConvertUtils.DayCounterNames),
             value="ActualActual_Bond",
             clearable=False,
+            searchable=False,
+            className="dark-dropdown",
         )
 
         discount_curve_dropdown = dcc.Dropdown(
             id=self.discount_curve_id,
             clearable=False,
+            searchable=False,
+            className="dark-dropdown",
         )
 
         # ---- Zero-coupon inputs (fixed width) ----

@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import QuantLib as ql
 import Common.Utils.ConvertUtils as ConvertUtils
 import Common.Utils.CurveUtils as CurveUtils

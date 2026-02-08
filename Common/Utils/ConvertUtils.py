@@ -1,3 +1,7 @@
+# Copyright (c) Mike Kipnis - DashQL
+
+from datetime import datetime
+
 import QuantLib as ql
 
 # -----------------------
@@ -174,3 +178,7 @@ def enum_from_string(path: str):
     for part in path.split("."):
         obj = getattr(obj, part)
     return obj
+
+def to_ql_date(date_str: str) -> ql.Date:
+    dt = datetime.strptime(date_str, "%Y-%m-%d")
+    return ql.Date(dt.day, dt.month, dt.year)

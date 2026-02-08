@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import json
 import os
 from datetime import datetime
@@ -5,6 +7,9 @@ from datetime import datetime
 import QuantLib as ql
 import dash
 import dash_bootstrap_components as dbc
+import dash_ag_grid as dag
+from dash_bootstrap_templates import load_figure_template
+
 from dash import html, dcc, Input, Output
 
 from Common.Components import CurveMarketDataPanel
@@ -175,18 +180,36 @@ class RatesAnalytics:
                                     # Support section under accordion
                                     html.Div(
                                         [
-                                            "For support, contact: ",
-                                            html.A(
-                                                "mike.kipnis@gmail.com",
-                                                href="mailto:mike.kipnis@gmail.com",
+                                            html.Div(
+                                                [
+                                                    html.Span(
+                                                        [
+                                                            "For support, contact: ",
+                                                            html.A(
+                                                                "mike.kipnis@gmail.com",
+                                                                href="mailto:mike.kipnis@gmail.com",
+                                                                style={
+                                                                    "textDecoration": "underline",
+                                                                    "color": "#cccccc",
+                                                                },
+                                                            ),
+                                                        ]
+                                                    ),
+                                                    html.A(
+                                                        "https://ustreasuries.online",
+                                                        href="https://ustreasuries.online",
+                                                        style={"textDecoration": "underline"},
+                                                    ),
+                                                ],
                                                 style={
-                                                    "textDecoration": "underline",
-                                                    "color": "#AAAAAA",
+                                                    "display": "flex",
+                                                    "justifyContent": "space-between",
+                                                    "alignItems": "center",
                                                 },
-                                            ),
+                                            )
                                         ],
                                         style={
-                                            "fontSize": "12px",
+                                            "fontSize": "14px",
                                             "color": "#AAAAAA",
                                             "marginTop": "8px",
                                             "textAlign": "center",  # center horizontally
@@ -218,10 +241,10 @@ class RatesAnalytics:
 # =============================
 app = dash.Dash(
     __name__,
-    suppress_callback_exceptions=True,
     title="Rates Analytics",
-    external_stylesheets=[dbc.themes.SUPERHERO],
+    external_stylesheets=[dag.themes.BASE, dag.themes.BALHAM, dbc.themes.SUPERHERO],
 )
+load_figure_template("sandstone_dark")
 
 server = app.server  # Gunicorn expects this
 

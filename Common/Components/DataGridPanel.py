@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 from typing import Optional, Dict, Any
 
 import dash
@@ -12,7 +14,7 @@ class DataGridPanel(object):
             column_defs: list,
             prefix: str,
             default_column_defs: Optional[Dict[str, Any]] = None,
-            dashGridOptions: Optional[Dict[str, Any]] = None,
+            dashGridOptions: Optional[Dict[str, Any]] = {},
     ):
         self.app = app
         self.data_grid_id = f"{prefix}-grid-id"
@@ -25,6 +27,8 @@ class DataGridPanel(object):
                 "minWidth": 50,
                 "resizable": False
             }
+
+        dashGridOptions["theme"] = "legacy"
 
         self.grid = dag.AgGrid(
             id=self.data_grid_id,

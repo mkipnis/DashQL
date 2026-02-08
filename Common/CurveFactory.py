@@ -1,3 +1,5 @@
+# Copyright (c) Mike Kipnis - DashQL
+
 import json
 import argparse
 from datetime import date
