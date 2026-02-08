@@ -91,6 +91,7 @@ class OptionsPanel:
                 "rowSelection": "single",
                 "animateRows": True,
                 "suppressMaintainUnsortedOrder": True,  # 👈 critical
+                "theme":"legacy"
             },
             style={"height": "450px", "width": "100%"},
             className="ag-theme-balham-dark",

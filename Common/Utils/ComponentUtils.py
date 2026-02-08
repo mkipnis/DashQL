@@ -29,15 +29,12 @@ COMMON_INPUT_CLASS = "common-input input-narrow"
 # -----------------------
 
 def horizontal_labeled_dropdown(label, dropdown):
-    """Wrap dropdown with a horizontal label"""
-    dropdown.className = "dropdown-narrow"
-
     return html.Div(
         [
-            html.Label(label),
-            dropdown,
+            html.Label(label, className="form-row-label"),
+            dropdown
         ],
-        className="form-row",
+        className="form-row horizontal-row",
     )
 
 
@@ -45,14 +42,14 @@ def horizontal_labeled_date_picker(label, picker_id, date=None):
     """Wrap date picker with a horizontal label (tight spacing)"""
     return html.Div(
         [
-            html.Label(label),
+            html.Label(label, className="form-row-label"),
             dcc.DatePickerSingle(
                 id=picker_id,
                 date=date,
                 className="datepicker-narrow",
             ),
         ],
-        className="form-row datepicker-row",
+        className="form-row horizontal-row",
     )
 
 
@@ -68,9 +65,22 @@ def labeled_text_input(
     font_color=None,
     label_color=None,
 ):
-    input_style = {}
-    if font_color:
-        input_style["color"] = font_color
+
+    text_style = {
+        "backgroundColor": "#0f1118",  # dark background
+        "border": "1px solid #5a5f7a",  # lighter border
+        "borderRadius": "2px",
+        "padding": "4px 8px",
+        "height": "32px",
+        "color": "white",
+        "textAlign": "right",
+        "boxSizing": "border-box",
+        "textTransform": "uppercase",
+        "fontWeight": "bold",
+        }
+
+    if text_style:
+        text_style["color"] = font_color
 
     label_style = {}
     if label_color:
@@ -85,8 +95,8 @@ def labeled_text_input(
                 placeholder=placeholder,
                 value=value,
                 debounce=True,
-                className=f"{COMMON_INPUT_CLASS} input-uppercase",
-                style=input_style,
+                className="common-input input-uppercase",
+                style=text_style
             ),
         ],
         className="form-row",
@@ -94,9 +104,24 @@ def labeled_text_input(
 
 
 def labeled_number_input(label, input_id, placeholder="", value=None, step=0.01):
+    text_style = {
+        "backgroundColor": "#0f1118",       # dark background
+        "border": "1px solid #5a5f7a",      # lighter border
+        "borderRadius": "2px",
+        "padding": "4px 8px",
+        "height": "32px",
+        "color": "white",
+        "textAlign": "right",
+        "boxSizing": "border-box",
+        "fontWeight": "bold",
+        "appearance": "textfield",           # native spinner (or none)
+        "-webkit-appearance": "textfield",   # remove Chrome spinner
+        "-moz-appearance": "textfield",      # remove Firefox spinner
+    }
+
     return html.Div(
         [
-            html.Label(label),
+            html.Label(label, style={"color": "white", "fontWeight": "bold"}),
             dcc.Input(
                 id=input_id,
                 type="number",
@@ -104,11 +129,13 @@ def labeled_number_input(label, input_id, placeholder="", value=None, step=0.01)
                 step=step,
                 value=value,
                 debounce=True,
-                className=COMMON_INPUT_CLASS,
+                className=f"{COMMON_INPUT_CLASS} input-uppercase",
+                style=text_style,
             ),
         ],
         className="form-row",
     )
+
 
 
 def labeled_text(label, value_id=None, value=""):

@@ -55,6 +55,9 @@ class OISMidCurvePanel(object):
                 }
             ],
             rowData=[],
+            dashGridOptions={
+                "theme": "legacy"
+            },
             defaultColDef={"flex": 1, "minWidth": 50, "resizable": False},
             style={"height": "450px", "width": "100%"},
             className="ag-theme-balham-dark",
@@ -67,30 +70,44 @@ class OISMidCurvePanel(object):
     def layout(self):
         forecast_dropdown = dcc.Dropdown(
             id=self.forecast_curve_id,
-            clearable=False
+            options=[],
+            value=None,
+            searchable=False,
+            className="dark-dropdown",
+            style={"width": "100%"}
         )
 
         return html.Div(
             [
                 html.Div(
                     [
-                        # ---- Row 1: Label + Dropdown ----
                         html.Div(
                             [
-                                ComponentUtils.horizontal_labeled_dropdown(
-                                    "Forecast Curve",
-                                    forecast_dropdown
+                                html.Div(
+                                    ComponentUtils.panel_label("Forecast mid-curves"),
+                                    style={
+                                        "flex": "1 1 auto",  # take remaining space
+                                        "textAlign": "right"  # push text to far right
+                                    }
                                 ),
-                                ComponentUtils.panel_label("Forecast mid-curves"),
+                                html.Div(
+                                    ComponentUtils.horizontal_labeled_dropdown(
+                                        "Forecast Curve",
+                                        forecast_dropdown
+                                    ),
+                                    style={
+                                        "flex": "0 1 auto"  # only as wide as needed
+                                    }
+                                ),
                             ],
                             style={
                                 "display": "flex",
                                 "alignItems": "center",
-                                "justifyContent": "space-between",
-                                "gap": "12px",
-                                "width": "100%",
-                            },
-                        ),
+                                "width": "100%",  # full width container
+                                "gap": "12px",  # spacing between dropdown and label
+                            }
+                        )
+                        ,
 
                         dcc.Store(id=self.forecast_curve_data_id),
 

@@ -56,7 +56,8 @@ class CurveMarketDataPanel(object):
             ],
             rowData=[],
             dashGridOptions={
-                "rowSelection": "single"
+                "rowSelection": "single",
+                "theme": "legacy"
             },
 
             # 🟦 GLOBAL cellStyle applied to all cells
@@ -79,9 +80,7 @@ class CurveMarketDataPanel(object):
 
             # ✅ style must be a dict, not a string
             style={"height": "80vh", "width": "100%"},
-
-            className="ag-theme-balham-dark"
-
+            className="ag-theme-balham-dark",
         )
 
         self._register_callbacks()
@@ -92,7 +91,9 @@ class CurveMarketDataPanel(object):
                 id=self.index_dropdown_id,
                 options=[],
                 value=None,
-                clearable=False
+                searchable=False,
+                className="dark-dropdown",
+                style={"width": "100%"}
             ),
             self.grid,
             dcc.Store(id=self.user_market_data_id),

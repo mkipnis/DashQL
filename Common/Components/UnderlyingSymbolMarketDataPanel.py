@@ -47,7 +47,8 @@ class UnderlyingSymbolMarketDataPanel(object):
             ],
             rowData=[],
             dashGridOptions={
-                "rowSelection": "single"
+                "rowSelection": "single",
+                "theme": "legacy"
             },
 
             # 🟦 GLOBAL cellStyle applied to all cells

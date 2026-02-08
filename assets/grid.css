@@ -1,0 +1,42 @@
+/* AG Grid dark theme */
+.ag-theme-quartz-dark {
+    font-size: 14px;
+}
+.ag-theme-balham-dark .text-right {
+    text-align: right;
+}
+
+.selected-expiration-cell-call {
+    color: #4BC0C0 !important;
+    font-weight: 600;
+}
+
+.selected-expiration-cell-put {
+    color: #FF6384 !important;
+    font-weight: 600;
+}
+
+
+/* Calls */
+.ag-theme-balham-dark .ag-cell.itm {
+    color: #FFFFFF;  /* in the money, bright */
+}
+
+.ag-theme-balham-dark .ag-cell.otm {
+    color: #CCCCCC;  /* out of the money, dim */
+}
+
+/* Puts */
+.ag-theme-balham-dark .ag-cell.itm {
+    color: #FFFFFF;
+}
+
+.ag-theme-balham-dark .ag-cell.otm {
+    color: #CCCCCC;
+}
+
+/* Optional: keep vols orange */
+.ag-theme-balham-dark .ag-cell.call-vol,
+.ag-theme-balham-dark .ag-cell.put-vol {
+    color: #FFA500 !important;
+}

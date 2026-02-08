@@ -1,0 +1,32 @@
+/* =========================
+   DASH TABS DARK THEME (smaller height)
+   ========================= */
+.custom-tabs,
+.custom-tabs .tab-content,
+.custom-tabs .tab-pane {
+    background-color: #0e2537 !important;
+    padding-left: 0px;
+    border: 1px solid #2a2f42 !important;
+}
+
+/* Tab headers with borders */
+.custom-tab {
+    border: 1px solid #2a2f42 !important;
+    background-color: #2a2f42 !important;
+    color: #888888 !important;
+    padding: 10px 10px !important;       /* reduce vertical padding */
+    font-size: 16px !important;       /* optional: reduce font size slightly */
+    /line-height: 1.5 !important;      /* tighten line height */
+}
+
+.custom-tab--selected {
+    background-color: #0f1118 !important;
+    color: white !important;
+    padding: 10px 10px !important;
+    line-height: 1.5 !important;
+}
+
+.custom-tab:hover,
+.custom-tab--selected:hover {
+    color: white !important;
+}

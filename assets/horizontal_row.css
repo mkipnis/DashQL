@@ -1,0 +1,25 @@
+/* Make any horizontal row a flex container */
+.form-row.horizontal-row {
+    display: flex;
+    width: 100%;
+    gap: 8px; /* optional spacing between label and component */
+    align-items: center; /* vertically center content */
+}
+
+/* Label: always 50% */
+.form-row.horizontal-row .form-row-label {
+    flex: 0 0 50%;
+    max-width: 50%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Component: always 50% */
+.form-row.horizontal-row > *:not(.form-row-label) {
+    flex: 0 0 50%;
+    max-width: 50%;
+    width: 100%; /* fill parent width */
+}

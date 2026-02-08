@@ -49,6 +49,7 @@ class VolPanel(object):
             dashGridOptions={
                 "context": {"selectedExpiration": None},
                 "suppressCellFocus": True,
+                "theme": "legacy"
             },
         )
 

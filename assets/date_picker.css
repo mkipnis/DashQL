@@ -1,0 +1,195 @@
+/* =========================
+   Dash 4 DatePickerSingle – Dark Theme (No Dots)
+   ========================= */
+
+/* Container & input wrapper */
+.dash-datepicker,
+.dash-datepicker-input-wrapper {
+    width: 100% !important;
+}
+
+.dash-datepicker-input-wrapper {
+    height: 32px;
+    padding: 4px 8px;
+    border-radius: 0 !important;  /* remove corner dots */
+    border: 1px solid #2a2f42 !important;
+    background-color: #0f1118 !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.dash-datepicker-input-wrapper input {
+    width: 100% !important;
+    background-color: transparent !important;
+    border: none !important;
+    color: white !important;
+    font-size: 14px;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.dash-datepicker-input-wrapper input::placeholder {
+    color: #888 !important;
+}
+
+.dash-datepicker-caret-icon {
+    color: #cccccc !important;
+    margin-left: 4px;
+}
+
+.dash-datepicker-input-wrapper:focus-within {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* =========================
+   Radix popups (all DatePicker popups)
+   ========================= */
+div[data-radix-popper-content-wrapper] {
+    background-color: #0e2537 !important;
+    border: none !important;
+}
+
+/* Main popup */
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup,
+div[data-radix-popper-content-wrapper] .dash-datepicker-content,
+div[data-radix-popper-content-wrapper] .dash-datepicker-calendar-wrapper,
+div[data-radix-popper-content-wrapper] .dash-datepicker-controls,
+div[data-radix-popper-content-wrapper] .dash-input-container,
+div[data-radix-popper-content-wrapper] .dash-input {
+    background-color: #0e2537 !important;
+    color: white !important;
+    border-radius: 0 !important;
+    border: 1px solid #2a2f42 !important;
+    overflow: hidden !important;
+    z-index: 10000 !important;
+}
+
+/* Remove pseudo-elements and dots */
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup *,
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup::before,
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup::after,
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup *::before,
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup *::after {
+    outline: none !important;
+    box-shadow: none !important;
+    content: none !important;
+    border-radius: 0 !important;
+}
+
+/* Navigation / header */
+div[data-radix-popper-content-wrapper] .react-calendar__navigation {
+    background-color: #0e2537 !important;
+    color: white !important;
+    border-bottom: 1px solid #2a2f42 !important;
+    border-radius: 0 !important;
+}
+
+/* Day-of-week headers (Su, Mo, Tu...) */
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays {
+    background-color: #0e2537 !important;
+    color: white !important;
+}
+
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays__weekday abbr {
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 500;
+}
+
+/* Calendar tiles (days) */
+div[data-radix-popper-content-wrapper] .react-calendar__tile,
+.dash-datepicker-calendar .dash-datepicker-calendar-date-inside,
+.dash-datepicker-calendar .dash-datepicker-calendar-date-outside {
+    background-color: #0e2537 !important;
+    color: white !important;
+    border-radius: 0 !important;
+}
+
+/* Hover / selected day */
+div[data-radix-popper-content-wrapper] .react-calendar__tile:hover,
+div[data-radix-popper-content-wrapper] .react-calendar__tile--active,
+.dash-datepicker-calendar .dash-datepicker-calendar-date-inside:hover,
+.dash-datepicker-calendar .dash-datepicker-calendar-date-selected {
+    background-color: #1a3b55 !important;
+    color: white !important;
+}
+
+/* Month & year dropdowns inside DatePicker */
+.dash-datepicker-calendar-wrapper .dash-dropdown,
+.dash-datepicker-calendar-wrapper select {
+    background-color: #0f1118 !important;
+    color: white !important;
+    border: 1px solid #2a2f42 !important;
+    border-radius: 2px;
+    padding: 2px 4px;
+    font-size: 14px;
+    height: 32px;
+    outline: none !important;
+}
+
+/* Dropdown text & arrows */
+.dash-datepicker-calendar-wrapper .dash-dropdown .dash-dropdown-value span,
+.dash-datepicker-calendar-wrapper .dash-dropdown .dash-dropdown-trigger-icon {
+    color: white !important;
+}
+
+/* Dropdown options */
+.dash-datepicker-calendar-wrapper select option {
+    background-color: #0e2537 !important;
+    color: white !important;
+}
+
+/* Hide default number spinners */
+.dash-datepicker-calendar-wrapper input[type=number]::-webkit-inner-spin-button,
+.dash-datepicker-calendar-wrapper input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Stepper buttons (+/-) */
+.dash-datepicker-calendar-wrapper .dash-input-stepper {
+    background-color: #0f1118 !important;
+    color: white !important;
+    border: 1px solid #2a2f42 !important;
+    border-radius: 2px;
+    font-size: 14px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    margin: 0;
+}
+
+.dash-datepicker-calendar-wrapper .dash-input-stepper:hover {
+    background-color: #123149 !important;
+}
+
+/* Force all text inside DatePicker popup to white */
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup,
+div[data-radix-popper-content-wrapper] .dash-datepicker-popup *,
+div[data-radix-popper-content-wrapper] .dash-datepicker-content,
+div[data-radix-popper-content-wrapper] .dash-datepicker-content * {
+    color: white !important;
+}
+
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays,
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays__weekday,
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays__weekday abbr {
+    color: white !important;
+}
+
+/* Day-of-week headers (Su, Mo, Tu...) */
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays {
+    background-color: #0e2537 !important; /* match popup background */
+}
+
+div[data-radix-popper-content-wrapper] .react-calendar__month-view__weekdays__weekday abbr {
+    color: #f09d09 !important; /* amber color for weekdays */
+    text-decoration: none !important;
+    font-weight: 500; /* optional, matches your design */
+}
+
