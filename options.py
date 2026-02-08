@@ -8,6 +8,7 @@ import QuantLib as ql
 import dash
 import dash_bootstrap_components as dbc
 from dash import html, dcc, Input, Output
+import dash_ag_grid as dag
 
 from Common.Components import UnderlyingSymbolMarketDataPanel
 from Vol import VolPanel, OptionsPanel
@@ -220,7 +221,7 @@ class VolAnalytics:
 app = dash.Dash(
     __name__,
     title="Options Analytics",
-    external_stylesheets=[dbc.themes.SUPERHERO],
+    external_stylesheets=[dag.themes.BASE, dag.themes.BALHAM, dbc.themes.SUPERHERO],
 )
 
 server = app.server  # Gunicorn expects this

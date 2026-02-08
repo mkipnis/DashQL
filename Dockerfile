@@ -28,4 +28,5 @@ COPY . .
 EXPOSE 8050
 
 # Use Gunicorn with 4 workers for production
-CMD ["gunicorn", "rates:server", "--bind", "0.0.0.0:8050", "--workers", "4", "--worker-class", "gthread"]
+#CMD ["gunicorn", "rates:server", "--bind", "0.0.0.0:8050", "--workers", "4", "--worker-class", "gthread"]
+#CMD ["gunicorn", "options:server", "--bind", "0.0.0.0:8050", "--workers", "4", "--worker-class", "gthread"]

@@ -1,13 +1,35 @@
 version: "3.9"
 
 services:
-  dash-rates:
-    build: .
+  rates:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dash-ql
+    container_name: dash-ql-rates
     ports:
       - "8050:8050"
-    volumes:
-      - .:/app
     environment:
-      - DASH_DEBUG=false
-      - DASH_HOST=0.0.0.0
+      - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
+    command: >
+      gunicorn rates:server
+      --bind 0.0.0.0:8050
+      --workers 4
+      --worker-class gthread
+    restart: unless-stopped
+
+  options:
+    image: dash-ql   # reuse the same built image
+    container_name: dash-ql-options
+    ports:
+      - "8060:8060"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    command: >
+      gunicorn options:server
+      --bind 0.0.0.0:8060
+      --workers 4
+      --worker-class gthread
+    restart: unless-stopped
