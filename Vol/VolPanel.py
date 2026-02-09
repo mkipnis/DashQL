@@ -11,17 +11,6 @@ import plotly.graph_objs as go
 from Common.Utils import ComponentUtils, CurveUtils
 
 
-def normalize_strike_value(value):
-    """
-    Return int if the number is whole, otherwise float.
-    """
-    try:
-        num = float(value)
-        if num.is_integer():
-            return str(int(num))
-        return str(num)
-    except (ValueError, TypeError):
-        return str(value)
 
 class VolPanel(object):
 
@@ -203,7 +192,7 @@ class VolPanel(object):
 
             row_data = []
             for strike in merged_strikes:
-                row = {"strike": strike, 'strike_str': normalize_strike_value(strike)}
+                row = {"strike": strike}
                 for expiration_date, vol_for_exp in vols_for_exps_and_strikes.items():
                     row[f"{expiration_date}_call"] = vol_for_exp.get("calls", {}).get(strike)
                     row[f"{expiration_date}_put"] = vol_for_exp.get("puts", {}).get(strike)
@@ -303,13 +292,11 @@ class VolPanel(object):
                 call_vols[strike] = float(row.get(f"{expiration_date}_call"))
                 put_vols[strike] = float(row.get(f"{expiration_date}_put"))
 
-            strike_normalized = [normalize_strike_value(v) for v in strikes]
-
             fig = go.Figure()
 
             # Calls
             fig.add_trace(go.Scatter(
-                x=strike_normalized,
+                x=strikes,
                 y=list(call_vols.values()),
                 mode='lines+markers',
                 name='Calls',
@@ -321,7 +308,7 @@ class VolPanel(object):
 
             # Puts
             fig.add_trace(go.Scatter(
-                x=strike_normalized,
+                x=strikes,
                 y=list(put_vols.values()),
                 mode='lines+markers',
                 name='Puts',

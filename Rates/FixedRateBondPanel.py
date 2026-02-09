@@ -105,7 +105,7 @@ class FixedRateBondPanel:
         bond_inputs = html.Div(
             [
                 ComponentUtils.horizontal_labeled_dropdown(
-                    "Discount Curve", discount_curve_dropdown
+                    "Disc. Curve", discount_curve_dropdown
                 ),
                 self.tenor_panel.layout(),
                 dcc.Store(id=self.discount_curve_data_id),
@@ -123,11 +123,11 @@ class FixedRateBondPanel:
                 ),
             ],
             style={
-                "flex": f"0 0 {COLUMN_WIDTH}",
                 "width": COLUMN_WIDTH,
                 "display": "flex",
                 "flexDirection": "column",
                 "gap": "8px",
+                "padding": "0 12px"
             },
         )
 
@@ -177,7 +177,6 @@ class FixedRateBondPanel:
                                 ),
                             ),
                             style={
-                                "flex": "0 0 auto",
                                 "borderLeft": "1px solid #2a2f42",  # vertical divider on the left
                             },
                         ),
@@ -192,6 +191,7 @@ class FixedRateBondPanel:
                                 "flex": "1 1 auto",
                                 "minWidth": 0,
                                 "borderLeft": "1px solid #2a2f42",  # vertical divider on the left
+                                "padding": "0 12px"
                             },
                         ),
                     ],
