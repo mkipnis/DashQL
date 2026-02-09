@@ -119,6 +119,7 @@ class ZeroCouponBondPanel:
                 "display": "flex",
                 "flexDirection": "column",
                 "gap": "8px",
+                "padding": "0 12px"
             },
         )
 

@@ -75,8 +75,7 @@ def labeled_text_input(
         "color": "white",
         "textAlign": "right",
         "boxSizing": "border-box",
-        "textTransform": "uppercase",
-        "fontWeight": "bold",
+        "textTransform": "uppercase"
         }
 
     if text_style:
@@ -113,7 +112,6 @@ def labeled_number_input(label, input_id, placeholder="", value=None, step=0.01)
         "color": "white",
         "textAlign": "right",
         "boxSizing": "border-box",
-        "fontWeight": "bold",
         "appearance": "textfield",           # native spinner (or none)
         "-webkit-appearance": "textfield",   # remove Chrome spinner
         "-moz-appearance": "textfield",      # remove Firefox spinner
@@ -121,7 +119,7 @@ def labeled_number_input(label, input_id, placeholder="", value=None, step=0.01)
 
     return html.Div(
         [
-            html.Label(label, style={"color": "white", "fontWeight": "bold"}),
+            html.Label(label, style={"color": "white"}),
             dcc.Input(
                 id=input_id,
                 type="number",

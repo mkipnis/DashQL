@@ -112,6 +112,7 @@ class FloatingRateBondPanel:
                 "display": "flex",
                 "flexDirection": "column",
                 "gap": "8px",
+                "padding": "0 12px"
             },
         )
 
@@ -131,7 +132,8 @@ class FloatingRateBondPanel:
         # ---- Floating Rate Bond panel (inputs + results) ----
         bond_panel = html.Div(
             [bond_inputs, bond_results],
-            style={"display": "flex", "gap": "12px", "alignItems": "stretch", "borderLeft": "1px solid #2a2f42", "paddingLeft":"10px"},
+            style={"display": "flex", "gap": "12px", "alignItems": "stretch", "borderLeft": "1px solid #2a2f42",
+                   "padding": "0 12px"},
 
         )
 
