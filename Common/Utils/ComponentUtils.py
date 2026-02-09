@@ -75,7 +75,8 @@ def labeled_text_input(
         "color": "white",
         "textAlign": "right",
         "boxSizing": "border-box",
-        "textTransform": "uppercase"
+        "textTransform": "uppercase",
+        "flex": "0 0 50%"
         }
 
     if text_style:
@@ -87,7 +88,10 @@ def labeled_text_input(
 
     return html.Div(
         [
-            html.Label(label, style=label_style),
+            html.Label(label, style={
+                    "color": "white",
+                    "flex": "0 0 50%",
+                }),
             dcc.Input(
                 id=input_id,
                 type="text",
@@ -119,7 +123,13 @@ def labeled_number_input(label, input_id, placeholder="", value=None, step=0.01)
 
     return html.Div(
         [
-            html.Label(label, style={"color": "white"}),
+            html.Label(
+                label,
+                style={
+                    "color": "white",
+                    "flex": "0 0 50%",
+                },
+            ),
             dcc.Input(
                 id=input_id,
                 type="number",
@@ -128,10 +138,17 @@ def labeled_number_input(label, input_id, placeholder="", value=None, step=0.01)
                 value=value,
                 debounce=True,
                 className=f"{COMMON_INPUT_CLASS} input-uppercase",
-                style=text_style,
+                style={
+                    **text_style,
+                    "flex": "0 0 50%",
+                },
             ),
         ],
-        className="form-row",
+        style={
+            "display": "flex",
+            "alignItems": "center",
+            "gap": "8px",
+        },
     )
 
 
