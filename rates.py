@@ -243,6 +243,7 @@ app = dash.Dash(
     __name__,
     title="Rates Analytics",
     external_stylesheets=[dag.themes.BASE, dag.themes.BALHAM, dbc.themes.SUPERHERO],
+    eager_loading=True
 )
 load_figure_template("sandstone_dark")
 

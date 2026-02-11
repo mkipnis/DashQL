@@ -222,6 +222,7 @@ app = dash.Dash(
     __name__,
     title="Options Analytics",
     external_stylesheets=[dag.themes.BASE, dag.themes.BALHAM, dbc.themes.SUPERHERO],
+    eager_loading=True
 )
 
 server = app.server  # Gunicorn expects this
