@@ -141,7 +141,7 @@ class OptionsPanel:
             Input("selected-expiration-vols", "data"),
             prevent_initial_call=True,
         )
-        def setup_option(selected_instrument, selected_exp_vols):
+        def setup_options(selected_instrument, selected_exp_vols):
             try:
                 if not selected_exp_vols:
                     raise dash.exceptions.PreventUpdate
@@ -178,7 +178,7 @@ class OptionsPanel:
             Input("risk-free-rates", "data"),
             prevent_initial_call=True,
         )
-        def reprice_option(symbol, row_data, eval_date, risk_free_rates):
+        def price_options(symbol, row_data, eval_date, risk_free_rates):
             try:
                 if not row_data:
                     raise dash.exceptions.PreventUpdate
