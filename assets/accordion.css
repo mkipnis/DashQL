@@ -1,29 +1,45 @@
-/* =========================
-   ACCORDION
-   ========================= */
-.accordion, .accordion-body, .accordion-item, .accordion-button {
+/* Accordion container */
+.accordion {
+    background-color: #0e2537 !important;  /* dark container */
+}
+
+/* Each panel item */
+.accordion-item {
     background-color: #0e2537 !important;
     border: 1px solid #2a2f42 !important;
-    /* border-radius: 4px !important; */
-    color: #888888 !important;
-    box-shadow: none !important;
 }
-.accordion-button:hover {
-    color: white !important;
+
+/* Header / button */
+.accordion-button {
+    background-color: #0e2537 !important;
+    color: #f09d08 !important;
+    border: 1px solid #2a2f42 !important;
 }
+
+/* Expanded header */
 .accordion-button:not(.collapsed) {
     background-color: #0f1118 !important;
     color: white !important;
 }
-.accordion-button::after {
-    filter: invert(65%);
+
+/* Hover */
+.accordion-button:hover {
+    color: white !important;
 }
+
+/* Body content */
 .accordion-body {
-    color: #cccccc !important;
     background-color: #0e2537 !important;
+    color: #cccccc !important;
     padding: 10px !important;
 }
 
+/* Arrow icon */
+.accordion-button::after {
+    filter: invert(65%) !important;
+}
+
+/* Remove focus outline */
 .accordion-button:focus {
     outline: none !important;
     box-shadow: none !important;

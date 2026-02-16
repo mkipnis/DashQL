@@ -103,8 +103,7 @@ class UnderlyingSymbolMarketDataPanel(object):
 
             return user_market_data
 
-            # ✅ ROW SELECTION CALLBACK
-
+        # ✅ ROW SELECTION CALLBACK
         @self.app.callback(
             Output("selected-underlying-symbol", "data"),
             Input(self.market_data_grid_id, "selectedRows"),

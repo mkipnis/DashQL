@@ -241,7 +241,7 @@ app.layout = vol_analytics.layout()
     Output("risk-free-rates", "data"),
     Input("startup", "n_intervals"),
 )
-def set_quantlib_business_date(_):
+def setup_options_monitor(_):
     debug_messages = []
     underlying_symbol_data = []
     risk_free_rates = []
