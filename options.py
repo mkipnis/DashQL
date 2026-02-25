@@ -218,6 +218,13 @@ class VolAnalytics:
 # =============================
 # Dash App Initialization
 # =============================
+import os
+import dash
+from dash import html
+import dash_bootstrap_components as dbc
+import dash_ag_grid as dag
+
+# Initialize app
 app = dash.Dash(
     __name__,
     title="Options Analytics",
@@ -227,9 +234,27 @@ app = dash.Dash(
 
 server = app.server  # Gunicorn expects this
 
-vol_analytics = VolAnalytics(app)
-app.layout = vol_analytics.layout()
+# Path to assets folder
+ASSETS_FOLDER = "assets"
 
+# Dynamically include all CSS files in assets/
+css_files = [
+    f for f in os.listdir(ASSETS_FOLDER) if f.endswith(".css")
+]
+
+# Instantiate your existing analytics layout
+vol_analytics = VolAnalytics(app)
+
+# Wrap layout to include all CSS assets explicitly
+app.layout = html.Div(
+    [
+        # Dynamically add all CSS files
+        *[html.Link(href=app.get_asset_url(f) + "?v=2", rel="stylesheet") for f in css_files],
+
+        # Original layout
+        vol_analytics.layout()
+    ]
+)
 
 # =============================
 # Callbacks

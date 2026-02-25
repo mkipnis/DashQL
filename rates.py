@@ -245,12 +245,33 @@ app = dash.Dash(
     external_stylesheets=[dag.themes.BASE, dag.themes.BALHAM, dbc.themes.SUPERHERO],
     eager_loading=True
 )
+
+# Load Plotly template
 load_figure_template("sandstone_dark")
 
 server = app.server  # Gunicorn expects this
 
+# Path to assets folder
+ASSETS_FOLDER = "assets"
+
+# Dynamically include all CSS files in assets/
+css_files = [
+    f for f in os.listdir(ASSETS_FOLDER) if f.endswith(".css")
+]
+
+# Instantiate your analytics layout
 rates_analytics = RatesAnalytics(app)
-app.layout = rates_analytics.layout()
+
+# Wrap layout to include all CSS assets explicitly
+app.layout = html.Div(
+    [
+        # Dynamically add all CSS files with cache-busting
+        *[html.Link(href=app.get_asset_url(f) + "?v=2", rel="stylesheet") for f in css_files],
+
+        # Original layout
+        rates_analytics.layout()
+    ]
+)
 
 
 # =============================
