@@ -65,6 +65,8 @@ Key functionalities:
 * Prices options and computes Greeks (Delta, Gamma, Vega, Theta, Rho).
 * Updates prices and Greeks dynamically when inputs change
 
+![Options Overview](media/options_overview.gif)
+
 [https://options.plotly.app](https://options.plotly.app)
 
 ### Dataflow
@@ -103,6 +105,8 @@ The Underlying Symbol Market Data panel consumes **"underlying-symbol-market-dat
 
 [UnderlyingSymbolMarketDataPanel.py](Common/Components/UnderlyingSymbolMarketDataPanel.py)
 
+![Update price and dividends](media/options_price_change.gif)
+
 ### Callbacks
 
 #### Market Data Grid - Consumer
@@ -134,6 +138,8 @@ def on_row_selected_updated(selected_rows, user_market_data, current_symbol):
 The Volatility Panel consumes **"vol-market-data"** and **"selected-underlying-symbol"** as inputs. It displays the volatility surface both in a grid and in a chart. Users can update volatility values directly in the grid and select different expiration dates by clicking on the corresponding columns.
 
 [VolPanel.py](Vol/VolPanel.py)
+
+![Vol Update](media/options_vol_change.gif)
 
 #### Callbacks
 
@@ -177,6 +183,8 @@ def update_graph(expiration_date, user_market_data):
 The Options Panel consumes **"underlying-symbol-market-data"**, **"selected-expiration-vols"**, and **"risk-free-rates"** as inputs. It initializes the option contracts for the selected expiration and strikes, then calls the pricing model to compute the option price and Greeks for each specified strike.
 
 [OptionsPanel.py](Vol/OptionsPanel.py)
+
+![Options NPV and Greeks](media/options_npv_greeks.gif)
 
 ### Callbacks
 
