@@ -47,6 +47,12 @@ Specify the tenor to generate a set of zero-coupon bonds. Specify and update the
 
 ![Zero Coupon Bonds](media/zero_coupon_bonds.gif)
 
+<be>
+
+---
+
+<br>
+
 
 ## Dev Guide (Options)
 
