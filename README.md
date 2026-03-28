@@ -1,9 +1,14 @@
 ## Plotly/Dash wrapper for QuantLib
 
+Plotly Dash provides a Python-native framework for building reactive, browser-based analytical applications without requiring JavaScript or frontend frameworks. By combining Dash’s reactive UI model with QuantLib’s pricing engines, we can deliver compact, extensible analytical tools implemented entirely in Python.
+
+
 ## Dev Guide (Options)
 
+#### Live App: [https://options.plotly.app](https://options.plotly.app)
+
 ### Objective
-The goal of this project is to go over an interactive stock options pricing system that exposes QuantLib’s pricing engines through a browser-based interface. The application integrates QuantLib for instrument construction and valuation with Plotly Dash for reactive UI and visualization.
+The goal of this section of the document is to go over an interactive stock options pricing system that exposes QuantLib’s pricing engines through a browser-based interface. The application integrates QuantLib for instrument construction and valuation with Plotly Dash for reactive UI and visualization.
 
 ### Functionality
 
@@ -18,8 +23,6 @@ Key functionalities:
 * Updates prices and Greeks dynamically when inputs change
 
 ![Options Overview](media/options_overview.gif)
-
-[https://options.plotly.app](https://options.plotly.app)
 
 ### Dataflow
 
@@ -169,13 +172,13 @@ def price_options(symbol, row_data, eval_date, risk_free_rates):
 
 Plotly Dash provides a Python-native framework for building reactive, browser-based analytical applications without requiring JavaScript or frontend frameworks. Its callback architecture allows UI components to respond automatically to state changes, making it well suited for financial workflows where pricing and risk metrics must update immediately as market inputs change.
 
-<be>
 
 ---
 
-<br>
-
 ## Use case - Rates
+
+#### Live App: [https://rates.plotly.app](https://rates.plotly.app)
+
 ### Curve update
 Update an individual market data input of an OIS forecast curve to trigger recalculation of all remaining curve tenors and automatic repricing of dependent mid curves.
 
@@ -205,6 +208,7 @@ Specify the tenor to generate a set of zero-coupon bonds. Specify and update the
 ![Zero Coupon Bonds](media/zero_coupon_bonds.gif)
 
 
+---
 
 ### To build and run
 ```
